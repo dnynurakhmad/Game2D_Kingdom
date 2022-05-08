@@ -1,31 +1,82 @@
 using System.Collections;
 using System.Collections.Generic;
+using System;
 using UnityEngine;
+
+[Serializable]
+public struct UnitPoint
+{
+    public float CurrentPoint;
+    public float MaximumPoint;
+}
 
 public class PlayerActive : MonoBehaviour
 {
     public UnitState State;
     public bool IsAlive;
-    public float HealthPoint;
-    public float MagicSpeed;
-    public float StaminaPoint;
+    public bool IsGuard;
+    public float[] CooldownSkill;
+
+    public UnitPoint HealthPoint;
+    public UnitPoint MagicPoint;
+    public UnitPoint StaminaPoint;
     public float MoveSpeed;
     public float AtkSpeed;
 
+    public float[] SpellTime { get; set; }
+
     private Animator playerAnim;
     private AudioSource playerAudio;
+    private AudioSource attackAudio;
+    private AudioSource skill_1Audio;
+    private Vector2 directPos;
+    private float AtkTime;
+
+    private void Player_Attack()
+    {
+        if (AtkTime == 0 && State == UnitState.Idle)
+        {
+            State = UnitState.Attack;
+            playerAnim.SetTrigger("Attacking");            
+            attackAudio.Play();
+            AtkTime = AtkSpeed;
+        }
+    }
+
+    private IEnumerator Player_Attack(SkillSet skill, Action action = null)
+    {
+        if (SpellTime[(int)skill - 1] == 0 && State == UnitState.Idle)
+        {
+            State = UnitState.Spell;
+            playerAnim.SetTrigger(skill.ToString());
+            SpellTime[(int)skill - 1] = CooldownSkill[(int)skill - 1];
+            switch (skill)
+            {
+                case SkillSet.NinjaAttack:
+                    skill_1Audio.Play();
+                    StaminaPoint.CurrentPoint -= 20;
+                    break;
+                case SkillSet.DemonShield:
+                    MagicPoint.CurrentPoint -= 50;
+                    break;
+            }
+            yield return new WaitForSeconds(1f);
+            action?.Invoke();
+        }
+    }
 
     private void Player_Movement(Vector2 moving)
     {
         moving.Normalize();
-        playerAnim.SetFloat("AxisX", moving.x);
-        playerAnim.SetFloat("AxisY", moving.y);
+        playerAnim.SetFloat("AxisX", directPos.x);
+        playerAnim.SetFloat("AxisY", directPos.y);
         if (moving.x !=0 || moving.y !=0)
         {
+            directPos = moving;
             var xAndy = Mathf.Sqrt(Mathf.Pow(moving.x, 2) +
                                         Mathf.Pow(moving.y, 2));
-            var pos_x = moving.x * MoveSpeed * Time.deltaTime / xAndy;
-            var pos_y = moving.y * MoveSpeed * Time.deltaTime / xAndy;
+            var pos_x = moving.x * MoveSpeed * Time.fixedDeltaTime / xAndy;
+            var pos_y = moving.y * MoveSpeed * Time.fixedDeltaTime / xAndy;
             var pos_z = transform.position.z;
             transform.Translate(pos_x, pos_y, pos_z, Space.Self);
             playerAnim.SetBool("IsMoving", true);
@@ -45,11 +96,11 @@ public class PlayerActive : MonoBehaviour
 
     private void Player_Death()
     {
-        if (HealthPoint <= 0)
+        if (HealthPoint.CurrentPoint <= 0)
         {
             GetComponent<Rigidbody2D>().constraints = RigidbodyConstraints2D.FreezeAll;
             Player_Movement(Vector2.zero);
-            HealthPoint = 0;
+            HealthPoint.CurrentPoint = 0;
             playerAnim.SetTrigger("Dead");
             State = UnitState.Dead;
             IsAlive = false;
@@ -60,9 +111,12 @@ public class PlayerActive : MonoBehaviour
     {
         playerAnim = GetComponent<Animator>();
         playerAudio = GetComponent<AudioSource>();
+        skill_1Audio = transform.Find("abilities").Find("ninjaAttack").GetComponent<AudioSource>();
+        attackAudio = transform.Find("class").Find("swordman").GetComponent<AudioSource>();
+        SpellTime = new float[] { 0f, 0f, 0f };
     }
 
-    private void Update()
+    private void FixedUpdate()
     {
         if (IsAlive)
         {
@@ -70,8 +124,73 @@ public class PlayerActive : MonoBehaviour
             moveaway.x = Input.GetAxis("Horizontal");
             moveaway.y = Input.GetAxis("Vertical");
             Player_Movement(moveaway);
+
+            var gm = GameManager.Instance;
+            if (Input.GetButtonDown("Jump"))
+            {
+                Player_Attack();
+            } 
+            else if (Input.GetKeyDown(KeyCode.Alpha1))
+            {
+                if (StaminaPoint.CurrentPoint >= 20)
+                {
+                    StartCoroutine(Player_Attack(SkillSet.NinjaAttack));
+                }               
+            }
+            else if (Input.GetKeyDown(KeyCode.Alpha2))
+            {
+                if (MagicPoint.CurrentPoint >= 50)
+                {
+                    StartCoroutine(Player_Attack(SkillSet.DemonShield, () => {
+                        var shield = Instantiate(gm.Origin_demonShield, transform);
+                        Destroy(shield, 10f);
+                    }));
+                }
+            }
+            else if (Input.GetKeyDown(KeyCode.Alpha3))
+            {
+                if (HealthPoint.CurrentPoint < HealthPoint.MaximumPoint && SpellTime[2] == 0)
+                {
+                    var effect = Instantiate(gm.Origin_lightSpell, transform);
+                    Destroy(effect, 1f);
+
+                    HealthPoint.CurrentPoint += 100;
+                    if (HealthPoint.CurrentPoint > HealthPoint.MaximumPoint)
+                    {
+                        HealthPoint.CurrentPoint = HealthPoint.MaximumPoint;
+                    }
+                    SpellTime[2] = CooldownSkill[2];
+                }
+            }
+
+            Player_Death();
         }
 
-        Player_Death();
+        for (int i = 0; i < SpellTime.Length; i++)
+        {
+            if (SpellTime[i] > 0f)
+            {
+                SpellTime[i] -= Time.fixedDeltaTime;
+            }
+
+            if (SpellTime[i] < 0f)
+            {
+                SpellTime[i] = 0f;
+                State = UnitState.Idle;
+            }
+        }
+
+        if (AtkTime > 0f)
+        {
+            AtkTime -= Time.fixedDeltaTime;
+        }
+
+        if (AtkTime < 0f)
+        {
+            AtkTime = 0f;
+            State = UnitState.Idle;
+        }
+
+        IsGuard = transform.Find("demonShield(Clone)");
     }
 }

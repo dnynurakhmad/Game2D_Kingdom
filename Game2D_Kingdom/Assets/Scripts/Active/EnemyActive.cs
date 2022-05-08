@@ -24,16 +24,17 @@ public class EnemyActive : MonoBehaviour
         var gm = GameManager.Instance;
         if (AtkTime == 0 && player.IsAlive)
         {
-            enemyAnim.SetTrigger("Attacking");
             if (Creep == EnemySet.Witch)
             {
+                enemyAnim.SetTrigger("Spelling");
                 var location = RandomPosition(transform.position);
-                var vfx = Instantiate(gm.Origin_lightSpell, location, Quaternion.identity);
+                var vfx = Instantiate(gm.Origin_lightSpell, location + new Vector3(0f, -0.56f, 0f), Quaternion.identity);
                 Instantiate(gm.Origin_skelCreep, location, Quaternion.identity);
                 Destroy(vfx, 1f);
             }
             else
             {
+                enemyAnim.SetTrigger("Attacking");
                 enemyAudio.Play();
             }
             AtkTime = AtkSpeed;
@@ -50,7 +51,7 @@ public class EnemyActive : MonoBehaviour
     private void Enemy_Movement(bool isForward)
     {
         var movetoward = Vector3.MoveTowards(transform.position, Target.position,
-                                             MoveSpeed * Time.deltaTime);
+                                             MoveSpeed * Time.fixedDeltaTime);
         var towardpos = movetoward - transform.position;
         ChangeDirection(towardpos, isForward);
         if (isForward)
@@ -112,17 +113,48 @@ public class EnemyActive : MonoBehaviour
         return rand;
     }
 
+    private void OnDisable()
+    {
+        if (!gameObject.scene.isLoaded) return;
+        var gm = GameManager.Instance;
+        switch (Creep)
+        {
+            case EnemySet.Damaged:
+                var vfx_fireRed = Instantiate(gm.Origin_fireRed, transform.position, Quaternion.identity);
+                Destroy(vfx_fireRed, 1f);
+                gm.KillPoint++;
+                break;
+            case EnemySet.Normal:
+                Instantiate(gm.Origin_damagedCreep, transform.position, Quaternion.identity);
+                gm.GamePoint+=5;
+                break;
+            case EnemySet.Armored:
+                Instantiate(gm.Origin_normalCreep, transform.position, Quaternion.identity);
+                gm.GamePoint+=30;
+                break;
+            case EnemySet.Witch:
+                Instantiate(gm.Origin_damagedCreep, transform.position, Quaternion.identity);
+                gm.GamePoint+=15;
+                break;
+            case EnemySet.Skeleton:
+                var vfx_fireBlue = Instantiate(gm.Origin_fireBlue, transform.position, Quaternion.identity);
+                Destroy(vfx_fireBlue, 1f);
+                gm.GamePoint+=5;
+                break;
+        }
+    }
+
     private void Awake()
     {
         enemyAnim = GetComponent<Animator>();
         enemyAudio = GetComponent<AudioSource>();
-        Target = GameObject.Find("player").transform;
     }
 
-    private void Update()
+    private void FixedUpdate()
     {
         if (IsAlive)
         {
+            Target = GameObject.Find("player").transform;
             var distance = Vector3.Distance(transform.position, Target.position);
             if (distance < 1.7f && IsForward)
             {
@@ -153,8 +185,17 @@ public class EnemyActive : MonoBehaviour
 
             if (AtkTime > 0f)
             {
-                AtkTime -= Time.deltaTime;
-                State = UnitState.Attack;
+                AtkTime -= Time.fixedDeltaTime;
+
+                if (Creep == EnemySet.Witch)
+                {
+                    State = UnitState.Spell;
+                }
+                else
+                {
+                    State = UnitState.Attack;
+                }
+                
             }
 
             if (AtkTime < 0f)
