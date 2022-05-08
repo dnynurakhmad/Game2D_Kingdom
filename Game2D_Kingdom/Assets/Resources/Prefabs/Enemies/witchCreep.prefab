@@ -157,8 +157,8 @@ Rigidbody2D:
   m_GravityScale: 0
   m_Material: {fileID: 0}
   m_Interpolate: 0
-  m_SleepingMode: 1
-  m_CollisionDetection: 0
+  m_SleepingMode: 0
+  m_CollisionDetection: 1
   m_Constraints: 4
 --- !u!95 &2139370776101979299
 Animator:
@@ -198,4 +198,4 @@ MonoBehaviour:
   IsForward: 0
   HealthPoint: 200
   MoveSpeed: 2
-  AtkSpeed: 1
+  AtkSpeed: 15

@@ -10,6 +10,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1593455535889590867}
   - component: {fileID: 1593455535889590866}
+  - component: {fileID: 5618369560788614229}
   m_Layer: 0
   m_Name: hitLeft
   m_TagString: Untagged
@@ -57,6 +58,19 @@ BoxCollider2D:
   serializedVersion: 2
   m_Size: {x: 1.40343, y: 0.8524035}
   m_EdgeRadius: 0
+--- !u!114 &5618369560788614229
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1593455535889590892}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a1e9586fff0f73c4ba84c5e2c41b19d4, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  AttackPoint: 50
 --- !u!1 &1593455536001237656
 GameObject:
   m_ObjectHideFlags: 0
@@ -219,8 +233,8 @@ Rigidbody2D:
   m_GravityScale: 0
   m_Material: {fileID: 0}
   m_Interpolate: 0
-  m_SleepingMode: 1
-  m_CollisionDetection: 0
+  m_SleepingMode: 0
+  m_CollisionDetection: 1
   m_Constraints: 4
 --- !u!95 &1593455536001237634
 Animator:
@@ -356,7 +370,7 @@ MonoBehaviour:
   IsForward: 1
   HealthPoint: 450
   MoveSpeed: 1.5
-  AtkSpeed: 1
+  AtkSpeed: 2
 --- !u!1 &1593455536030150592
 GameObject:
   m_ObjectHideFlags: 0
@@ -367,6 +381,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1593455536030150599}
   - component: {fileID: 1593455536030150598}
+  - component: {fileID: 1738116616779772351}
   m_Layer: 0
   m_Name: hitDown
   m_TagString: Untagged
@@ -414,6 +429,19 @@ BoxCollider2D:
   serializedVersion: 2
   m_Size: {x: 0.8524035, y: 1.4034301}
   m_EdgeRadius: 0
+--- !u!114 &1738116616779772351
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1593455536030150592}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a1e9586fff0f73c4ba84c5e2c41b19d4, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  AttackPoint: 50
 --- !u!1 &1593455536370441674
 GameObject:
   m_ObjectHideFlags: 0
@@ -424,6 +452,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1593455536370441673}
   - component: {fileID: 1593455536370441672}
+  - component: {fileID: 4452424326954741493}
   m_Layer: 0
   m_Name: hitUp
   m_TagString: Untagged
@@ -471,6 +500,19 @@ BoxCollider2D:
   serializedVersion: 2
   m_Size: {x: 0.8524035, y: 1.4034301}
   m_EdgeRadius: 0
+--- !u!114 &4452424326954741493
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1593455536370441674}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a1e9586fff0f73c4ba84c5e2c41b19d4, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  AttackPoint: 50
 --- !u!1 &1593455537295373844
 GameObject:
   m_ObjectHideFlags: 0
@@ -481,6 +523,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1593455537295373851}
   - component: {fileID: 1593455537295373850}
+  - component: {fileID: 9218245758161542822}
   m_Layer: 0
   m_Name: hitRight
   m_TagString: Untagged
@@ -528,3 +571,16 @@ BoxCollider2D:
   serializedVersion: 2
   m_Size: {x: 1.40343, y: 0.8524035}
   m_EdgeRadius: 0
+--- !u!114 &9218245758161542822
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1593455537295373844}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a1e9586fff0f73c4ba84c5e2c41b19d4, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  AttackPoint: 50
