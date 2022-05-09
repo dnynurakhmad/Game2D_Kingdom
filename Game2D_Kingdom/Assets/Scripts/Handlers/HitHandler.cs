@@ -29,7 +29,10 @@ public class HitHandler : MonoBehaviour
                     enemy.HealthPoint -= AttackPoint;
                     DamageActive.PopUpDamage(gm.Origin_DamagePopUp, position, AttackPoint, DamageState.PlayerPhs);
                     var player = transform.parent.parent.parent.GetComponent<PlayerActive>(); ;
-                    player.StaminaPoint.CurrentProp += 10;
+                    if (player)
+                    {
+                        player.StaminaPoint.CurrentProp += 10;
+                    }
                 }
                 count++;
             }

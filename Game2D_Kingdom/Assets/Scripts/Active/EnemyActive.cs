@@ -8,12 +8,17 @@ public class EnemyActive : MonoBehaviour
     public Transform Target;
     public UnitState State;
     public EnemySet Creep;
+    public GameObject Spawner;
+    public int SlotNum;
+
     public bool IsAlive;
     public bool IsForward;
     public float HealthPoint;
     public float MoveSpeed;
     public float AtkSpeed;
 
+    private GenerateActive generator;
+    private GameObject creep;
     private Animator enemyAnim;
     private AudioSource enemyAudio;
     private float AtkTime;
@@ -125,7 +130,12 @@ public class EnemyActive : MonoBehaviour
                 gm.KillPoint++;
                 break;
             case EnemySet.Normal:
-                Instantiate(gm.Origin_damagedCreep, transform.position, Quaternion.identity);
+                creep = gm.Origin_damagedCreep;
+                creep.GetComponent<EnemyActive>().Spawner = Spawner;
+                creep.GetComponent<EnemyActive>().SlotNum = SlotNum;
+                generator = Spawner.GetComponent<GenerateActive>();
+                generator.Creeps[SlotNum] = Instantiate(creep, transform.position, Quaternion.identity, Spawner.transform);
+                
                 Instantiate(gm.Origin_Power_Green, RandomPosition(transform.position), Quaternion.identity);
                 if (UnityEngine.Random.Range(1, 10) <= 5)
                 {
@@ -134,7 +144,12 @@ public class EnemyActive : MonoBehaviour
                 gm.GamePoint += 5;
                 break;
             case EnemySet.Armored:
-                Instantiate(gm.Origin_normalCreep, transform.position, Quaternion.identity);
+                creep = gm.Origin_normalCreep;
+                creep.GetComponent<EnemyActive>().Spawner = Spawner;
+                creep.GetComponent<EnemyActive>().SlotNum = SlotNum;
+                generator = Spawner.GetComponent<GenerateActive>();
+                generator.Creeps[SlotNum] = Instantiate(creep, transform.position, Quaternion.identity, Spawner.transform);
+
                 Instantiate(gm.Origin_Power_Green, RandomPosition(transform.position), Quaternion.identity);
                 Instantiate(gm.Origin_Power_Green, RandomPosition(transform.position), Quaternion.identity);
                 Instantiate(gm.Origin_Power_Green, RandomPosition(transform.position), Quaternion.identity);
@@ -149,7 +164,12 @@ public class EnemyActive : MonoBehaviour
                 gm.GamePoint+=30;
                 break;
             case EnemySet.Witch:
-                Instantiate(gm.Origin_damagedCreep, transform.position, Quaternion.identity);
+                creep = gm.Origin_damagedCreep;
+                creep.GetComponent<EnemyActive>().Spawner = Spawner;
+                creep.GetComponent<EnemyActive>().SlotNum = SlotNum;
+                generator = Spawner.GetComponent<GenerateActive>();
+                generator.Creeps[SlotNum] = Instantiate(creep, transform.position, Quaternion.identity, Spawner.transform);
+
                 Instantiate(gm.Origin_Power_Blue, RandomPosition(transform.position), Quaternion.identity);
                 Instantiate(gm.Origin_Power_Blue, RandomPosition(transform.position), Quaternion.identity);
                 Instantiate(gm.Origin_Power_Blue, RandomPosition(transform.position), Quaternion.identity);
