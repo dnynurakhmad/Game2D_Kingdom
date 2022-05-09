@@ -155,6 +155,7 @@ public class PlayerActive : MonoBehaviour
                     Destroy(effect, 1f);
 
                     HealthPoint.CurrentPoint += 100;
+                    DamageActive.PopUpDamage(gm.Origin_DamagePopUp, transform.position, 100, DamageState.Healing);
                     if (HealthPoint.CurrentPoint > HealthPoint.MaximumPoint)
                     {
                         HealthPoint.CurrentPoint = HealthPoint.MaximumPoint;

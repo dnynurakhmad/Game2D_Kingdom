@@ -13,6 +13,7 @@ public class GameManager : MonoBehaviour
     public GameObject Origin_fireRed => Resources.Load<GameObject>("Prefabs/Stuffs/fireRed");
     public GameObject Origin_fireBlue => Resources.Load<GameObject>("Prefabs/Stuffs/fireBlue");
     public GameObject Origin_demonShield => Resources.Load<GameObject>("Prefabs/Stuffs/demonShield");
+    public GameObject Origin_DamagePopUp => Resources.Load<GameObject>("Prefabs/Stuffs/DamagePopUp");
 
     public int GamePoint;
     public int KillPoint;
@@ -29,6 +30,13 @@ public class GameManager : MonoBehaviour
 public enum UnitState
 {
     Idle, Move, Attack, Spell, Dead,
+}
+
+public enum DamageState
+{
+    Default,
+    PlayerPhs, PlayerMgc,
+    EnemyPhs, Healing,
 }
 
 public enum EnemySet
