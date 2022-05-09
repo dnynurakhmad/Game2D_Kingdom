@@ -126,19 +126,57 @@ public class EnemyActive : MonoBehaviour
                 break;
             case EnemySet.Normal:
                 Instantiate(gm.Origin_damagedCreep, transform.position, Quaternion.identity);
-                gm.GamePoint+=5;
+                Instantiate(gm.Origin_Power_Green, RandomPosition(transform.position), Quaternion.identity);
+                if (UnityEngine.Random.Range(1, 10) <= 5)
+                {
+                    Instantiate(gm.Origin_Item_Elixir, RandomPosition(transform.position), Quaternion.identity);
+                }
+                gm.GamePoint += 5;
                 break;
             case EnemySet.Armored:
                 Instantiate(gm.Origin_normalCreep, transform.position, Quaternion.identity);
+                Instantiate(gm.Origin_Power_Green, RandomPosition(transform.position), Quaternion.identity);
+                Instantiate(gm.Origin_Power_Green, RandomPosition(transform.position), Quaternion.identity);
+                Instantiate(gm.Origin_Power_Green, RandomPosition(transform.position), Quaternion.identity);
+                Instantiate(gm.Origin_Power_Red, RandomPosition(transform.position), Quaternion.identity);
+                Instantiate(gm.Origin_Power_Red, RandomPosition(transform.position), Quaternion.identity);
+                Instantiate(gm.Origin_Item_Elixir, RandomPosition(transform.position), Quaternion.identity);
+                Instantiate(gm.Origin_Item_Elixir, RandomPosition(transform.position), Quaternion.identity);
+                if (UnityEngine.Random.Range(1, 10) <= 5)
+                {
+                    Instantiate(gm.Origin_Item_Scroll, RandomPosition(transform.position), Quaternion.identity);
+                }
                 gm.GamePoint+=30;
                 break;
             case EnemySet.Witch:
                 Instantiate(gm.Origin_damagedCreep, transform.position, Quaternion.identity);
+                Instantiate(gm.Origin_Power_Blue, RandomPosition(transform.position), Quaternion.identity);
+                Instantiate(gm.Origin_Power_Blue, RandomPosition(transform.position), Quaternion.identity);
+                Instantiate(gm.Origin_Power_Blue, RandomPosition(transform.position), Quaternion.identity);
+                Instantiate(gm.Origin_Item_Scroll, RandomPosition(transform.position), Quaternion.identity);
+                Instantiate(gm.Origin_Item_Scroll, RandomPosition(transform.position), Quaternion.identity);
                 gm.GamePoint+=15;
                 break;
             case EnemySet.Skeleton:
                 var vfx_fireBlue = Instantiate(gm.Origin_fireBlue, transform.position, Quaternion.identity);
                 Destroy(vfx_fireBlue, 1f);
+                Instantiate(gm.Origin_Item_Elixir, RandomPosition(transform.position), Quaternion.identity);
+                if (UnityEngine.Random.Range(1, 10) <= 2)
+                {
+                    Instantiate(gm.Origin_Item_Scroll, RandomPosition(transform.position), Quaternion.identity);
+                }
+                if (UnityEngine.Random.Range(1, 10) <= 5)
+                {
+                    Instantiate(gm.Origin_Power_Green, RandomPosition(transform.position), Quaternion.identity);
+                }
+                if (UnityEngine.Random.Range(1, 10) <= 2)
+                {
+                    Instantiate(gm.Origin_Power_Red, RandomPosition(transform.position), Quaternion.identity);
+                }
+                if (UnityEngine.Random.Range(1, 10) <= 2)
+                {
+                    Instantiate(gm.Origin_Power_Blue, RandomPosition(transform.position), Quaternion.identity);
+                }
                 gm.GamePoint+=5;
                 break;
         }

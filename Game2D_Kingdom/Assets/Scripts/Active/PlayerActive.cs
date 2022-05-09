@@ -8,6 +8,22 @@ public struct UnitPoint
 {
     public float CurrentPoint;
     public float MaximumPoint;
+
+    public float CurrentProp
+    {
+        get
+        {
+            return CurrentPoint;
+        }
+        set
+        {
+            CurrentPoint = value;
+            if (CurrentPoint > MaximumPoint)
+            {
+                CurrentPoint = MaximumPoint;
+            }
+        }
+    }
 }
 
 public class PlayerActive : MonoBehaviour
@@ -139,22 +155,24 @@ public class PlayerActive : MonoBehaviour
             }
             else if (Input.GetKeyDown(KeyCode.Alpha2))
             {
-                if (MagicPoint.CurrentPoint >= 50)
+                if (gm.Item_Scroll > 0 && MagicPoint.CurrentPoint >= 50)
                 {
                     StartCoroutine(Player_Attack(SkillSet.DemonShield, () => {
                         var shield = Instantiate(gm.Origin_demonShield, transform);
+                        gm.Item_Scroll--;
                         Destroy(shield, 10f);
                     }));
                 }
             }
             else if (Input.GetKeyDown(KeyCode.Alpha3))
             {
-                if (HealthPoint.CurrentPoint < HealthPoint.MaximumPoint && SpellTime[2] == 0)
+                if (gm.Item_Elixir > 0 && HealthPoint.CurrentPoint < HealthPoint.MaximumPoint && SpellTime[2] == 0)
                 {
                     var effect = Instantiate(gm.Origin_lightSpell, transform);
                     Destroy(effect, 1f);
 
-                    HealthPoint.CurrentPoint += 100;
+                    HealthPoint.CurrentProp += 100;
+                    gm.Item_Elixir--;
                     DamageActive.PopUpDamage(gm.Origin_DamagePopUp, transform.position, 100, DamageState.Healing);
                     if (HealthPoint.CurrentPoint > HealthPoint.MaximumPoint)
                     {
