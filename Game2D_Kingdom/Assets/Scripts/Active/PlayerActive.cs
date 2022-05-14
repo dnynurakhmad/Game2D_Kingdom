@@ -132,26 +132,22 @@ public class PlayerActive : MonoBehaviour
         SpellTime = new float[] { 0f, 0f, 0f };
     }
 
-    private void FixedUpdate()
+    private void Update()
     {
         if (IsAlive)
         {
-            var moveaway = Vector2.zero;
-            moveaway.x = Input.GetAxis("Horizontal");
-            moveaway.y = Input.GetAxis("Vertical");
-            Player_Movement(moveaway);
-
             var gm = GameManager.Instance;
             if (Input.GetButtonDown("Jump"))
+            //if (Input.GetKeyDown(KeyCode.Space))
             {
                 Player_Attack();
-            } 
+            }
             else if (Input.GetKeyDown(KeyCode.Alpha1))
             {
                 if (StaminaPoint.CurrentPoint >= 20)
                 {
                     StartCoroutine(Player_Attack(SkillSet.NinjaAttack));
-                }               
+                }
             }
             else if (Input.GetKeyDown(KeyCode.Alpha2))
             {
@@ -181,8 +177,6 @@ public class PlayerActive : MonoBehaviour
                     SpellTime[2] = CooldownSkill[2];
                 }
             }
-
-            Player_Death();
         }
 
         for (int i = 0; i < SpellTime.Length; i++)
@@ -211,5 +205,18 @@ public class PlayerActive : MonoBehaviour
         }
 
         IsGuard = transform.Find("demonShield(Clone)");
+    }
+
+    private void FixedUpdate()
+    {
+        if (IsAlive)
+        {
+            var moveaway = Vector2.zero;
+            moveaway.x = Input.GetAxis("Horizontal");
+            moveaway.y = Input.GetAxis("Vertical");
+            Player_Movement(moveaway);
+
+            Player_Death();
+        }
     }
 }

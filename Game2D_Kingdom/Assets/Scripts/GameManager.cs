@@ -20,6 +20,7 @@ public class GameManager : MonoBehaviour
     public GameObject Origin_Power_Red => Resources.Load<GameObject>("Prefabs/PowerUps/Power_Red");
     public GameObject Origin_Power_Blue => Resources.Load<GameObject>("Prefabs/PowerUps/Power_Blue");
 
+    public LevelSet LevelPoint;
     public int GamePoint;
     public int KillPoint;
     public int Item_Elixir
@@ -94,4 +95,9 @@ public enum ItemSet
     Default,
     Item_Elixir, Item_Scroll,
     Power_Green, Power_Red, Power_Blue,
+}
+
+public enum LevelSet
+{
+    Default, Easy, Normal, Hard,
 }

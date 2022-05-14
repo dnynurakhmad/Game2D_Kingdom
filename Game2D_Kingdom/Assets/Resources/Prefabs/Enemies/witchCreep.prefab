@@ -194,7 +194,9 @@ MonoBehaviour:
   Target: {fileID: 0}
   State: 0
   Creep: 5
-  IsAlive: 0
+  Spawner: {fileID: 0}
+  SlotNum: 0
+  IsAlive: 1
   IsForward: 0
   HealthPoint: 200
   MoveSpeed: 2
